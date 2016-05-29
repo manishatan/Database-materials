@@ -1,0 +1,366 @@
+
+/******************** DDL Commands****************************/
+
+Primary key - when primary key is created, it is not null by default
+Foreign key must
+ 
+/*-----------create cmd ----------------*/
+ 
+create database exercise;
+use exercise;
+ 
+create table movieStar (
+    mname varchar(10),
+    address varchar(20),
+    gender varchar(10),
+    birthdate varchar(20)
+);
+ 
+create table movieExec (
+    name varchar(10),
+    address varchar(20),
+    certNo varchar(10),
+    networth varchar(20)
+);
+ 
+create table studio (
+    name varchar(10),
+    address varchar(20),
+    presC varchar(10)
+);
+ 
+/* ------ alter cmds ------- */
+ 
+alter table movieStar add(birthdate date);      /* add a new column to existing table */
+ 
+alter table movieStar add( mname varchar(10), birthdate date);   /* add multiple columns to an existing table */
+ 
+alter table movieStar add( birthdate date default '2014-08-09');  /* add a column with a default value */
+ 
+alter table movieStar modify birthdate date;    /* to modify an existing column*/
+ 
+ 
+alter table movieStar modify birthdate date default '2014-10-15';
+alter table movieStar modify address varchar(20) default '645 W Barstow Ave';
+ 
+ 
+alter table movieStar drop birthdate;         /* drop a column using alter */
+alter table movieStar drop mname;
+ 
+/*------------ truncate ----------- */
+ 
+truncate table movieStar;
+ 
+/*truncate is diff from delete . delete deletes all rows from a
+table but truncate re-initializes a table(like a newly created table*/
+ 
+/*--------------drop --------------*/
+ 
+drop table movieStar;
+ 
+/*------------rename--------------*/
+ 
+rename table studio to movieStudio;
+ 
+/*****************************DML commands***************************************************/
+ 
+/*---------------- insert cmd ---------------------------*/
+
+insert into movieStar values('xyz','8uf887','f','2015-12-01'),
+('janniee','254547','m','2014-01-06');					/*best way to insert values into table*/
+ 
+insert into movieStar(mname,address,gender,birthdate)
+values('xyz','8uf887','f','2015-12-01'),
+('janniee','254547','m','2014-01-06');
+ 
+insert into movieStar(mname,address,gender,birthdate)
+values('divya','8uf887','f',default);
+ 
+insert into movieStar
+values('jones','8uf887','f',null);  /* example to enter a null value for birthdate*/
+ 
+ 
+insert into movieStar(mname)      /* example to enter null value for gender and default 									values for address and birthdate */
+values('ritaja');
+ 
+insert into movieStar(mname,address,gender,birthdate)
+values('pavi','8uf887','f','2015-12-01');
+ 
+insert into movieExec
+values('sam','8uf887','5689','8000'),
+('pitroda','254547','5698','9000');
+
+insert into movieExec
+values('nishitha','8uf887','5689','8000'),
+('divya','254547','5698','9000');
+insert into movieExec
+values('harish','45676','5698','7000'),('harisha','45676','5698','9000');
+insert into movieStudio values('nishitha', '84587587','5632');
+insert into movieStudio values('sam', '84587587','5632');
+ 
+delete from movieExec;
+ 
+/*------------------- update cmd -------------------*/
+ 
+update movieStar
+set
+    birthdate = '2045-01-02'
+where
+    mname = 'rita';
+ 
+update movieStar
+set
+    birthdate = '2045-01-02',
+    address = 'clovis'
+where
+    mname = 'rita';  /* update multiple columns */
+ 
+/*--------------------delete cmd--------------------*/
+ 
+delete from movieStar;        /* delete all records from table */
+ 
+delete from movieStar
+where
+    mname = 'rita';     /* delete particular record from table */
+ 
+/***************************** DCL commands ************************************************/
+ 
+/* ------------ select cmd --------------- */
+select * from movieStar;
+select * from movieExec;
+ 
+/* ----------------- where and like clause ------------------*/
+ 
+/* % - represents 0/1 / more than one characters accessible
+   _ - represents only one character */
+ 
+select
+    *
+from
+    movieStar
+where
+    mname like '%a';
+ 
+select
+    *
+from
+    movieStar
+where
+    mname like '_a%';
+ 
+/* -------------------------- order by (sorting)  ------------------ */
+ 
+select
+    *
+from
+    movieExec
+order by networth;       /* by default sort is ascending ( ASC ) order */
+ 
+select
+    *
+from
+    movieExec
+order by networth DESC;   /* descending order */
+ 
+select distinct
+    *
+from
+    movieExec
+order by certNo , networth; /* sorts first certNo values then networth values */
+ 
+/*-------------------------- group by clause ----------------------------*/
+ 
+select
+    *
+from
+    movieExec
+group by networth;
+ 
+select
+    *
+from
+    movieExec
+where
+    name like '%t%'
+group by networth;
+ 
+select
+    name, count(certNo)
+from
+    movieExec
+group by networth;
+ 
+ 
+/*-------------------------having clause -----------------------------------------*/
+ 
+select
+    *
+from
+    movieExec
+group by networth
+having sum(certno) > 5600;
+ 
+/*-------------------------distinct keyword --------------------------------------*/
+ 
+select distinct
+    name
+from
+    movieExec;
+ 
+/**************************************** FUNCTIONS ********************************************************/
+ 
+/*-------------------aggregation function --------------------------------*/
+ 
+/* 1. AVG */
+ 
+select
+    avg(networth)
+from
+    movieExec;
+ 
+/* 2. count */
+/*  count (distinct ) */
+/* 3.  first() */
+/* 4. last() */
+/* 5. max */
+/* 6. min */
+/* 7. sum */
+ 
+/* ----------------- scalar functions -----------------------------------*/
+ 
+/* 1. ucase */
+/* 2. lcase */
+/* 3. mid   */
+ 
+select
+    MID(name, 3, 3)
+from
+    movieExec;
+ 
+/* 4. round(column_name,decimal) or round(col_name) */
+ 
+ 
+ 
+/*********************************     JOINS      ********************************************/
+ 
+/* -----------Cross join or cartesian product ---------------*/
+/* it returns a table that consists of records which combines each row
+ of first table with each row of second table */
+ 
+select
+    *
+from
+    movieStar
+        cross join
+    movieExec;
+ 
+/* ------------ Inner join / equi join ------------------------*/
+/* In this the result is based on matched data as the equality condition specified in the query */
+ 
+select
+    *
+from
+    movieStar,
+    movieExec
+where
+    movieStar.mname = movieExec.name;
+ 
+
+
+/* --------------Natural join ---------------------*/
+/* type of inner join which is based on column having same name and
+same data type present in both the tables to be joined */
+ 
+select
+    *
+from
+    movieExec
+        natural join
+    movieStudio;
+ 
+ 
+/* ---------------- Outer Join ------------------*/
+ 
+/* left outer join */
+ 
+select
+    *
+from
+    movieStar
+        left outer join
+    movieExec ON movieStar.mname = movieExec.name;
+ 
+/* right outer join */
+ 
+ 
+select
+    *
+from
+    movieStar
+        right outer join
+    movieExec ON movieStar.mname = movieExec.name;
+ 
+/* full outer join */
+select
+    *
+from
+    movieStar
+        FULL OUTER JOIN
+    movieExec ON movieStar.mname = movieExec.name;
+ 
+/*--------------------------------- Alias ------------------------------*/
+ 
+select
+    ms.mname, ms.address, me.networth
+from
+    movieStar as ms,
+    movieexec as me
+where
+    ms.mname = me.name;         /* Alias for table name */
+ 
+select
+    mname as name
+from
+    moviestar;                  /* Alias for column name */
+ 
+/*------------------------------Set operators ----------------------*/
+ 
+/* Union */
+/* combines results of 2 or more select statemenrts. combines two tables with same no of columns and data type.
+    eliminates duplicate rows */
+create table first (
+    id int(5),
+    name varchar(20)
+);
+create table second (
+    id int(5),
+    name varchar(20)
+);
+ 
+insert into first values('1','Adam'),('2','Akhil');
+insert into second values('2','Akhil'),('3','chester');
+ 
+select * from first
+union
+select * from second;
+ 
+/* Union all */
+ 
+select * from first
+union all
+select * from second;
+ 
+ 
+/* intersect */
+select * from first
+INTERSECT
+select * from second;
+ 
+/* minus */
+ 
+select * from first
+MINUS
+select * from second;
+ 
+ 
+ 
